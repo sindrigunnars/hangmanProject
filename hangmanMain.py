@@ -1,6 +1,5 @@
 import random as rnd
 import os
-
 class Hangman:
     def __init__(self, words, guess_limit = 6):
         self.guess_limit = guess_limit
