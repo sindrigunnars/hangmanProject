@@ -9,9 +9,8 @@ class HangmanGame:
         self.guess_number = int(input('How many guesses in this game?\nRecommended levels:\n\tEasy = 10\n\tNormal = 5\n\tHard = 2\n'))
 
     def initialize_words(self):
-        # with open('words.txt') as file:
-        #     self.word_database = list(file)
-        self.word_database = ['literal']
+        with open('wordlist.txt') as file:
+            self.word_database = list(file)
 
     def _continue(self):
         print(f'Your score is currently {self.score}')

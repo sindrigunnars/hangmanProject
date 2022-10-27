@@ -7,15 +7,19 @@ class Hangman:
         self.words = words
     
     def get_word(self):
-        self.word = list(rnd.choice(self.words).lower())
+        self.word = list(rnd.choice(self.words).lower().strip())
         self.display_word = ['-'] * len(self.word)
 
     def _check_guess(self, string):
         guess_bool = False
-        for i, j in enumerate(self.word):
-            if j == string:
-                self.display_word[i] = j
-                guess_bool = True
+        if len(string) == 1:
+            for i, j in enumerate(self.word):
+                if j == string:
+                    self.display_word[i] = j
+                    guess_bool = True
+        if string == ''.join(self.word):
+            self.display_word = list(string)
+            guess_bool = True
         if guess_bool:
             print(f'The word contains {string}')
         else:
