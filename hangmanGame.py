@@ -31,7 +31,7 @@ class HangmanGame:
         while True:
             hangman = hang.Hangman(self.word_database, self.guess_number)
             hangman.game_round()
-            self.score += int((hangman.result * (10/hangman.guess_limit)))
+            self.score += int(hangman.result * (10/hangman.guess_limit))
             if hangman.result == 1 and self.highscore < self.score:
                 self.highscore = self.score
             if not self._continue(): 
