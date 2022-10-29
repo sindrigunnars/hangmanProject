@@ -26,12 +26,13 @@ class LinkedList:
         self.size += 1
 
 class Leaderboard:
-    def __init__(self, file):
+    def __init__(self, file, display_limit = 10):
         self.file = file
         self.data = {}
+        self.display_limit = display_limit
         for line in self.file:
             name, score = line.strip().split(';')
-            self._insert(name, score)
+            self._insert(name, int(score))
 
     def _insert(self, name, score):
         if score not in self.data:
@@ -39,20 +40,17 @@ class Leaderboard:
         self.data[score].insert(name)
 
     def __str__(self):
-        count = 0
+        self.count = 0
         ret_str = ''
         for key, value in reversed(sorted(self.data.items())):
             temp = value.head
             while temp != None:
-                count += 1
+                self.count += 1
                 ret_str += f'{temp.data}: {key}\n'
                 temp = temp.next
-                if count == 10: break
-            if count == 10: break
+                if self.count == self.display_limit: break
+            if self.count == self.display_limit: break
         return ret_str.strip()
 
-with open('leaderboard.csv') as ldr:
-    node = Leaderboard(ldr)
-    print(node)
     # for key, value in sorted(node.data.items()):
     #     print(f'{key}, {value}')

@@ -46,11 +46,9 @@ class Hangman:
             if not self._check_guess(input_char):
                 self.guesses += 1
             if self._game_over(): break
-            os.system('clear')
 
 if __name__ == '__main__':
-    game = Hangman()
-    game.play()
+    pass
 
 
 
