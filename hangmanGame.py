@@ -1,6 +1,5 @@
-import hangmanMain as hang
+import singleGame as hang
 import leaderboard as ldrbrd
-import os
 
 class HangmanGame:
     def __init__(self):
@@ -11,37 +10,33 @@ class HangmanGame:
         self.ldr_length = 5
 
     def _guess_setting(self):
-        self.guess_number = int(input('How many guesses in this game?\nRecommended levels:\n\tEasy = 10\n\tNormal = 5\n\tHard = 2\n'))
+        self.guess_number = int(input('How many guesses in this game?\nRecommended levels:\n\tEasy = 10\n\tNormal = 5\n\tHard = 2\nValue: '))
 
-    def initialize_words(self):
+    def _initialize_words(self):
         with open('wordlist.txt') as file:
             self.word_database = list(file)
 
     def _continue(self):
-        print(f'Your score is currently {self.score}')
-        do_continue = str(input('Press Q to quit to main menu and save score, press any other key to continue')).lower()
+        print(f'Your score is currently {self.score}, high score this round is {self.highscore}')
+        do_continue = input('Press Q to quit game, press any other key to continue\n').lower()
         if do_continue == 'q':
             print('You exited the game')
             return False
         return True
 
-    def main_menu(self):
-        while True:
-            if self.empty_user:
-                self.username = str(input('Input username before you start, Username: '))
-                self.empty_user = False
-            main_input = str(input('Welcome to hangman!\nWhat do you want to do? Press\n1: Play Hangman\n2: Display Leaderboard\nQ: Exit game'))
-            if main_input == '1':
-                self.play()
-            if main_input == '2':
-                self.display_leaderboard()
-            if main_input == 'q':
-                break
+    def _add_words(self):        
+        word = (input("Add Word "))
+        with open("wordlist.txt", "a") as wordlist:
+            wordlist.write("\n" + word)
+        print("Word added!")
 
-    def display_leaderboard(self):
+    def _change_username(self):
+        self.username = input('Input username, Username: ')
+    
+    def _display_leaderboard(self):
         while True:
             with open('leaderboard.csv') as ldr:
-                self.ldr_length = int(input('How many scores do you want to see?'))
+                self.ldr_length = int(input('How many scores do you want to see?\n'))
                 display = ldrbrd.Leaderboard(ldr, self.ldr_length)
                 print(display)
             exit_cond = input('Press Q to quit to main menu!').lower()
@@ -52,8 +47,8 @@ class HangmanGame:
         with open('leaderboard.csv', 'a') as leaderboard:
             leaderboard.write(f'\n{self.username};{self.score}')
 
-    def play(self):
-        self.initialize_words()
+    def _play(self):
+        self._initialize_words()
         self._guess_setting()
         while True:
             hangman = hang.Hangman(self.word_database, self.guess_number)
@@ -61,10 +56,34 @@ class HangmanGame:
             self.score += int(hangman.result * (10/hangman.guess_limit))
             if hangman.result == 1 and self.highscore < self.score:
                 self.highscore = self.score
-            if not self._continue(): 
-                self._save_session()
+            if hangman.result == 0:
+                self.score = 0
+            if not self._continue():
+                save_bol = input(f"Press S to save your score ({self.highscore}) or press any other key to go to main menu\n").lower()
+                if save_bol == "s":
+                    self._save_session()
+                    print("Scores saved")
                 break
 
+    def main_menu(self):
+        while True:
+            if self.empty_user:
+                self.username = input('Input username before you start, Username: ')
+                self.empty_user = False
+            main_input = input('Welcome to hangman!\nWhat do you want to do? Press\n1: Play Hangman\n2: Display Leaderboard\n3: Add word\n4: Change Username\nQ: Exit menu\n').lower()
+            if main_input == '1':
+                self._play()
+            elif main_input == '2':
+                self._display_leaderboard()
+            elif main_input == "3":
+                self._add_words()
+            elif main_input == "4":
+                self._change_username()
+                print("Username changed")
+            elif main_input == 'q':
+                print('You exited the game')
+                break
+            
 if __name__ == '__main__':
     game = HangmanGame()
     game.main_menu()
