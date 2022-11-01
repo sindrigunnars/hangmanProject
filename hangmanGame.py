@@ -36,7 +36,7 @@ class HangmanGame:
         while True:
             with open('leaderboard.csv') as ldr:
                 self.ldr_length = int(input('How many scores do you want to see?\n'))
-                display = ldrbrd.Leaderboard(ldr, self.ldr_length)
+                display = ldrbrd.Leaderboard(ldr, self.username, self.ldr_length)
                 print(display)
             exit_cond = input('Press Q to quit to main menu!').lower()
             if exit_cond == 'q':

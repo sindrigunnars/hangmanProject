@@ -26,31 +26,40 @@ class LinkedList:
         self.size += 1
 
 class Leaderboard:
-    def __init__(self, file, display_limit = 10):
+    def __init__(self, file, name, display_limit = 10):
         self.file = file
+        self.name = name
         self.data = {}
+        self.average = {}
         self.display_limit = display_limit
         for line in self.file:
             name, score = line.strip().split(';')
             self._insert(name, int(score))
 
     def _insert(self, name, score):
+        if name not in self.average:
+            self.average[name] = []
         if score not in self.data:
             self.data[score] = LinkedList()
         self.data[score].insert(name)
+        self.average[name].append(score)
 
     def __str__(self):
         self.count = 0
-        ret_str = ''
+        ret_str = 'Leaderboard:\n'
         for key, value in reversed(sorted(self.data.items())):
             temp = value.head
             while temp != None:
                 self.count += 1
-                ret_str += f'{temp.data}: {key}\n'
+                ret_str += f'\t{temp.data}: {key}\n'
                 temp = temp.next
                 if self.count == self.display_limit: break
             if self.count == self.display_limit: break
-        return ret_str.strip()
+        if self.name in self.average:
+            ret_str += f'{self.name}, your average score is {int(sum(self.average[self.name]) / len(self.average[self.name]))}'
+        else:
+            ret_str += f'{self.name}, you have no saved scores'
+        return ret_str
 
     # for key, value in sorted(node.data.items()):
     #     print(f'{key}, {value}')
