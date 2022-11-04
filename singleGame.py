@@ -6,10 +6,14 @@ class Hangman:
         self.words = words
     
     def get_word(self):
+        '''Picks a random word from the word list and sets the
+        text to be displayed'''
         self.word = list(rnd.choice(self.words).lower().strip())
         self.display_word = ['-'] * len(self.word)
 
     def _check_guess(self, string):
+        '''Checks if guess is correct, works for both
+        single letter and larger substrings'''
         guess_bool = False
         if len(string) == 1:
             for i, j in enumerate(self.word):
@@ -26,6 +30,8 @@ class Hangman:
         return guess_bool
 
     def _game_over(self):
+        '''Checks if game over conditions are met and goes through
+        appropriate procedures if it is'''
         game_over = False
         if self.word == self.display_word:
             print(f'You won! The word was {"".join(self.word)}')
@@ -38,6 +44,7 @@ class Hangman:
         return game_over
 
     def game_round(self):
+        '''Main loop for a single round of hangman'''
         self.get_word()
         self.guesses = 0
         while True:

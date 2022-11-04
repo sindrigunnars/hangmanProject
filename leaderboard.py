@@ -4,6 +4,8 @@ class Node:
         self.next = next
 
 class LinkedList:
+    '''Fairly standard Linked List where insert is the 
+    only function required'''
     def __init__(self):
         self.head = None
         self.size = 0
@@ -27,6 +29,10 @@ class LinkedList:
 
 class Leaderboard:
     def __init__(self, file, name, display_limit = 10):
+        '''Main function of init is taking leaderboard file
+        and inserting into data structure where score is key
+        and username is value, average takes username as key
+        and list of scores as value'''
         self.file = file
         self.name = name
         self.data = {}
@@ -37,6 +43,7 @@ class Leaderboard:
             self._insert(name, int(score))
 
     def _insert(self, name, score):
+        '''Inserts into appropriate data structures'''
         if name not in self.average:
             self.average[name] = []
         if score not in self.data:
@@ -45,6 +52,8 @@ class Leaderboard:
         self.average[name].append(score)
 
     def __str__(self):
+        '''Returns string in correct format, displays selected
+        number of top scores and average scores for the user'''
         self.count = 0
         ret_str = 'Leaderboard:\n'
         for key, value in reversed(sorted(self.data.items())):

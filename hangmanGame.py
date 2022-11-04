@@ -8,13 +8,16 @@ class HangmanGame:
         self.username = None
 
     def __guess_setting(self):
+        '''Sets difficulty of game'''
         self.guess_number = int(input('How many guesses in this game?\nRecommended levels:\n\tEasy = 10\n\tNormal = 5\n\tHard = 2\nValue: '))
 
     def __initialize_words(self):
+        '''Puts the word from word file into a list'''
         with open('wordlist.txt') as file:
             self.word_database = list(file)
 
     def __continue(self):
+        '''Performs check for what user wants to to after a round'''
         print(f'Your score is currently {self.score}, high score this round is {self.highscore}')
         do_continue = input('Press Q to quit game, press any other key to continue\n').lower()
         if do_continue == 'q':
@@ -22,17 +25,21 @@ class HangmanGame:
             return False
         return True
 
-    def __add_words(self):        
+    def __add_words(self):
+        '''Adds custom words to the word file'''        
         word = (input("Add Word "))
         with open("wordlist.txt", "a") as wordlist:
             wordlist.write("\n" + word)
         print("Word added!")
 
     def __change_username(self):
+        '''Changes user for the program'''
         self.username = input('Input username, Username: ')
         print("Username changed!")
     
     def __display_leaderboard(self):
+        '''User chooses how many scores are displayed and
+        prints the string for Leaderboard class'''
         while True:
             with open('leaderboard.csv') as ldr:
                 self.ldr_length = int(input('How many scores do you want to see?\n'))
@@ -43,10 +50,12 @@ class HangmanGame:
                 break
 
     def __save_session(self):
+        '''Saves a new score to leaderboard file'''
         with open('leaderboard.csv', 'a') as leaderboard:
             leaderboard.write(f'\n{self.username};{self.score}')
 
     def __play(self):
+        '''Plays hangman until user opts to quit'''
         self.__initialize_words()
         self.__guess_setting()
         while True:
@@ -54,10 +63,13 @@ class HangmanGame:
             hangman.game_round()
             self.score += int(hangman.result * (10/hangman.guess_limit))
             if hangman.result == 1 and self.highscore < self.score:
+                #Saves the highscore for session if user should lose a game
                 self.highscore = self.score
             if hangman.result == 0:
+                #Sets score to 0 if player loses a round
                 self.score = 0
             if not self.__continue():
+                #Quits and saves game if user wishes to
                 save_bol = input(f"Press S to save your score ({self.highscore}) or press any other key to go to main menu\n").lower()
                 if save_bol == "s":
                     self.__save_session()
@@ -65,6 +77,8 @@ class HangmanGame:
                 break
 
     def main_menu(self):
+        '''Main menu offers to 1: play the game, 2: display leaderboard,
+        3: add words to word file or 4: change user'''
         while True:
             if self.username == None:
                 self.username = input('Input username before you start, Username: ')
