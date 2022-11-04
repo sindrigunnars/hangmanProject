@@ -4,5 +4,4 @@ mouse
 fly
 bird
 wolf
-dogs
 rat

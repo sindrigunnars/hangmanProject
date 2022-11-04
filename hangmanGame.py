@@ -1,5 +1,5 @@
-import singleGame as hang
-import leaderboard as ldrbrd
+import hangmanfiles.singleGame as hang
+import hangmanfiles.leaderboard as ldrbrd
 
 class HangmanGame:
     def __init__(self):
@@ -13,7 +13,7 @@ class HangmanGame:
 
     def __initialize_words(self):
         '''Puts the word from word file into a list'''
-        with open('wordlist.txt') as file:
+        with open('hangmanfiles/wordlist.txt') as file:
             self.word_database = list(file)
 
     def __continue(self):
@@ -28,7 +28,7 @@ class HangmanGame:
     def __add_words(self):
         '''Adds custom words to the word file'''        
         word = (input("Add Word "))
-        with open("wordlist.txt", "a") as wordlist:
+        with open("hangmanfiles/wordlist.txt", "a") as wordlist:
             wordlist.write("\n" + word)
         print("Word added!")
 
@@ -41,7 +41,7 @@ class HangmanGame:
         '''User chooses how many scores are displayed and
         prints the string for Leaderboard class'''
         while True:
-            with open('leaderboard.csv') as ldr:
+            with open('hangmanfiles/leaderboard.csv') as ldr:
                 self.ldr_length = int(input('How many scores do you want to see?\n'))
                 display = ldrbrd.Leaderboard(ldr, self.username, self.ldr_length)
                 print(display)
@@ -51,11 +51,12 @@ class HangmanGame:
 
     def __save_session(self):
         '''Saves a new score to leaderboard file'''
-        with open('leaderboard.csv', 'a') as leaderboard:
+        with open('hangmanfiles/leaderboard.csv', 'a') as leaderboard:
             leaderboard.write(f'\n{self.username};{self.score}')
 
     def __play(self):
         '''Plays hangman until user opts to quit'''
+        self.highscore = self.score = 0
         self.__initialize_words()
         self.__guess_setting()
         while True:

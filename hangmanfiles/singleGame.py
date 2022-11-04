@@ -13,7 +13,7 @@ class Hangman:
 
     def _check_guess(self, string):
         '''Checks if guess is correct, works for both
-        single letter and larger substrings'''
+        single letter and whole word'''
         guess_bool = False
         if len(string) == 1:
             for i, j in enumerate(self.word):
@@ -50,8 +50,11 @@ class Hangman:
         while True:
             print(f'{"".join(self.display_word)}\tGuesses left = {self.guess_limit - self.guesses}')
             input_char = str(input('What is your guess?'))
-            if not self._check_guess(input_char):
-                self.guesses += 1
+            if input_char != '':
+                if not self._check_guess(input_char):
+                    self.guesses += 1
+            else:
+                print('You did not enter a letter or word!')
             if self._game_over(): break
 
 if __name__ == '__main__':
